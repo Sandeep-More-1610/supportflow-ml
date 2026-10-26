@@ -180,8 +180,8 @@ for another OS/browser. It checks desktop/mobile flows and saves screenshots plu
 
 ## Deployment and GitHub
 
-The project is prepared for GitHub, but no public repository or LinkedIn post is
-created automatically. Add your repository remote and push the project when ready.
+Public repository: https://github.com/Sandeep-More-1610/supportflow-ml.
+LinkedIn post copy is available in docs/PORTFOLIO.md for publication to your profile.
 Review `.gitignore` before adding files; the virtual environment and customer session
 data should not be committed.
 

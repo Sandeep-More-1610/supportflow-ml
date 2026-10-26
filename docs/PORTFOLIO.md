@@ -43,8 +43,8 @@ scores are uncalibrated and it can still misclassify unfamiliar requests.
 
 My next experiment is to evaluate probability calibration and out-of-domain detection.
 
-GitHub: [add the actual repository link]
-Demo: [add the actual demo link or attach a screen recording]
+GitHub: https://github.com/Sandeep-More-1610/supportflow-ml
+Attach a screen recording or project screenshot to show the app in use.
 
 #MachineLearning #NLP #Python #StudentProjects
 
