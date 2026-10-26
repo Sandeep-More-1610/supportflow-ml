@@ -108,6 +108,9 @@ def validate_text(text: str) -> str:
 
 
 def routing_decisions(probabilities: np.ndarray, threshold: float, margin: float = MIN_MARGIN):
+    # 1.0 is the explicit review-all policy, including numerically saturated scores.
+    if threshold >= 1.0:
+        return np.zeros(len(probabilities), dtype=bool)
     ranked = np.sort(probabilities, axis=1)
     return (ranked[:, -1] >= threshold) & (ranked[:, -1] - ranked[:, -2] >= margin)
 

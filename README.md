@@ -79,6 +79,9 @@ streamlit run app.py
 The CSV must contain a `text` column. Other columns are ignored. Invalid tickets
 remain in the result with an explanation. Exports protect against spreadsheet
 formula prefixes. Predictions are suggestions: no tickets are actually dispatched.
+Drafts, loaded CSVs and results survive navigation between app views within the same
+session. Clear loaded batch removes a loaded CSV and its results. Refreshing or
+closing the browser can still end the session; export records before doing so.
 
 ## Reproduce training and evaluation
 

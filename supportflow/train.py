@@ -4,8 +4,10 @@ from __future__ import annotations
 
 import json
 import platform
+import tempfile
 import time
 from datetime import datetime, timezone
+from pathlib import Path
 
 import joblib
 import numpy as np
@@ -20,6 +22,22 @@ from threadpoolctl import threadpool_limits
 
 from supportflow.data import ROOT, SEED, download_data, load_splits
 from supportflow.model import MIN_MARGIN, MODEL_PATH, routing_decisions, team_for
+
+
+def save_artifact(artifact: dict, destination: Path):
+    """Keep the last working model intact if serialization is interrupted."""
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    temporary = None
+    try:
+        with tempfile.NamedTemporaryFile(
+            dir=destination.parent, suffix=".tmp", delete=False
+        ) as file:
+            temporary = Path(file.name)
+            joblib.dump(artifact, file, compress=3)
+        temporary.replace(destination)
+    finally:
+        if temporary is not None:
+            temporary.unlink(missing_ok=True)
 
 
 def build_pipeline(hybrid: bool = False, c: float = 4.0) -> Pipeline:
@@ -79,11 +97,12 @@ def choose_threshold(probabilities, y, classes, target=0.90) -> tuple[float, lis
     correct = classes[probabilities.argmax(axis=1)] == np.asarray(y)
     curve = []
     for threshold in np.arange(0.20, 0.951, 0.025):
-        accepted = routing_decisions(probabilities, float(threshold))
+        threshold = round(float(threshold), 3)
+        accepted = routing_decisions(probabilities, threshold)
         count = int(accepted.sum())
         curve.append(
             {
-                "threshold": round(float(threshold), 3),
+                "threshold": threshold,
                 "accepted": count,
                 "coverage": float(accepted.mean()),
                 "accuracy_when_accepted": float(correct[accepted].mean()) if count else None,
@@ -244,9 +263,7 @@ def main():
             "No transformer trained or benchmarked in this version.",
         ],
     }
-    joblib.dump(
-        {"pipeline": pipeline, "threshold": threshold, "metadata": report}, MODEL_PATH, compress=3
-    )
+    save_artifact({"pipeline": pipeline, "threshold": threshold, "metadata": report}, MODEL_PATH)
     directory = ROOT / "reports"
     (directory / "metrics.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
     (directory / "classification_report.json").write_text(

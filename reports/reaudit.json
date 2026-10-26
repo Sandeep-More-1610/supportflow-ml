@@ -1,0 +1,12 @@
+{
+  "dataset_hashes_verified": 3,
+  "test_rows_rechecked": 3080,
+  "accuracy": 0.9,
+  "macro_f1": 0.9001408246720295,
+  "saved_metrics_match_recomputed_results": true,
+  "validation_threshold_recomputed": 0.2,
+  "maximum_batch_rows": 250,
+  "maximum_batch_payload_bytes": 975255,
+  "maximum_batch_seconds": 1.4189637999998013,
+  "fit_validation_test_disjoint": true
+}

@@ -11,6 +11,8 @@ from supportflow.model import TicketClassifier, validate_text
 
 MAX_BYTES = 1_000_000
 MAX_ROWS = 250
+# File size is already bounded; let row validation report oversized text individually.
+csv.field_size_limit(MAX_BYTES)
 
 
 def read_tickets(content: bytes) -> pd.DataFrame:
@@ -29,7 +31,8 @@ def read_tickets(content: bytes) -> pd.DataFrame:
         rows = []
         for row in reader:
             if not row:
-                continue
+                # A blank record is an invalid ticket, not a row to silently discard.
+                row = [""] * len(header)
             if len(row) != len(header):
                 raise ValueError(
                     "Every CSV row must have the same number of columns as the header."

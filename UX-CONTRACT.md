@@ -32,6 +32,9 @@ This is a local demonstration, with no operational banking authority.
 
 Triage: enter text → classify → inspect suggestion → optionally add to review queue.
 Input is preserved after errors. A changed message or threshold hides stale results.
+Ticket drafts and results survive navigation between workspace views in the same session.
+Replacing the model invalidates saved predictions and batch results, while preserving
+ticket drafts and human review records.
 Adding the same trimmed ticket twice does not duplicate it. No classification sends
 anything to a real support team. Error, empty and success states are inline.
 
@@ -39,6 +42,9 @@ Batch: pick CSV → validate structure/limits → classify → inspect status-fi
 → export all rows. The UI rejects files over 1 MB or 250 rows. Invalid individual
 tickets remain in the output with their reason. Changing upload or threshold hides
 previous output. CSV export escapes spreadsheet formula prefixes.
+Blank CSV records are retained as invalid tickets. Loaded files and results survive
+view navigation. Clear loaded batch removes both from the session without affecting
+review records. The upload picker then accepts a fresh file.
 
 Review: choose an awaiting ticket → confirm/correct intent → save → move to the next
 pending ticket. Records stay in session memory; an export preserves them. Corrections

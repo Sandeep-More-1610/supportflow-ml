@@ -20,6 +20,10 @@ def test_margin_gate_rejects_ambiguous_predictions():
     assert routing_decisions(scores, 0.45).tolist() == [False, True, False]
 
 
+def test_review_all_policy_rejects_even_saturated_probabilities():
+    assert not routing_decisions(np.array([[1.0, 0.0, 0.0]]), 1.0).any()
+
+
 def test_single_and_batch_predictions_match(model):
     text = "I was charged twice for the same purchase at a shop"
     single = model.predict(text)

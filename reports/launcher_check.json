@@ -1,0 +1,6 @@
+{
+  "powershell_launcher_health_check": "passed",
+  "isolated_test_port": 62312,
+  "original_app_port": 8501,
+  "isolated_process_tree_stopped": true
+}

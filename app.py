@@ -31,7 +31,40 @@ def load_model(stamp):
 
 def set_example(label):
     st.session_state.ticket_text = EXAMPLES[label]
+    st.session_state.ticket_draft = EXAMPLES[label]
     st.session_state.pop("prediction", None)
+
+
+def remember_ticket():
+    # Widget keys are cleaned up by Streamlit when another view is rendered.
+    st.session_state.ticket_draft = st.session_state.ticket_text
+
+
+def remember_batch(widget_key):
+    uploaded = st.session_state.get(widget_key)
+    if uploaded is None:
+        st.session_state.pop("batch_source", None)
+        st.session_state.pop("batch_result", None)
+    else:
+        source = {"name": uploaded.name, "content": uploaded.getvalue()}
+        if st.session_state.get("batch_source", {}).get("content") != source["content"]:
+            st.session_state.pop("batch_result", None)
+        st.session_state.batch_source = source
+
+
+def clear_batch():
+    st.session_state.pop("batch_source", None)
+    st.session_state.pop("batch_result", None)
+    st.session_state.batch_upload_generation = (
+        st.session_state.get("batch_upload_generation", 0) + 1
+    )
+
+
+def synchronize_model(stamp):
+    if st.session_state.get("active_model_stamp") != stamp:
+        for key in ("prediction", "batch_result", "review_threshold"):
+            st.session_state.pop(key, None)
+        st.session_state.active_model_stamp = stamp
 
 
 def triage(model, threshold):
@@ -53,6 +86,7 @@ def triage(model, threshold):
             max_chars=4000,
             placeholder="Describe the issue in at least three words…",
             help="Up to 4,000 characters. Use sample or anonymized text.",
+            on_change=remember_ticket,
         )
         if st.button("Classify ticket", type="primary", width="stretch"):
             try:
@@ -134,15 +168,22 @@ def batch_desk(model, threshold):
         "sample_tickets.csv",
         "text/csv",
     )
-    uploaded = st.file_uploader(
+    widget_key = f"batch_upload_{st.session_state.get('batch_upload_generation', 0)}"
+    st.file_uploader(
         "Upload tickets",
         type=["csv"],
         help="UTF-8 CSV with a text column. Maximum 1 MB and 250 tickets.",
+        key=widget_key,
+        on_change=remember_batch,
+        args=(widget_key,),
     )
-    if uploaded is None:
+    source = st.session_state.get("batch_source")
+    if source is None:
         st.info("Choose a CSV to begin. Only the text column is used; other columns are ignored.")
         return
-    content = uploaded.getvalue()
+    st.text(f"Loaded file: {source['name']}")
+    st.button("Clear loaded batch", on_click=clear_batch)
+    content = source["content"]
     batch_key = (hashlib.sha256(content).hexdigest(), threshold)
     try:
         frame = read_tickets(content)
@@ -221,7 +262,7 @@ def report_page(model):
         precision = routing["test_accuracy_when_accepted"]
         st.metric(
             "Accuracy among accepted test tickets",
-            f"{precision:.1%}" if precision else "No accepted tickets",
+            f"{precision:.1%}" if precision is not None else "No accepted tickets",
         )
         st.caption(
             "These figures use the frozen default threshold. The sidebar slider changes live suggestions only."
@@ -341,7 +382,11 @@ def review_page(model):
 
 
 def main():
-    st.session_state.setdefault("ticket_text", EXAMPLES["Delayed card"])
+    st.session_state.setdefault("ticket_draft", EXAMPLES["Delayed card"])
+    # Re-save on every view so Streamlit does not clean up the hidden widget key.
+    st.session_state.ticket_text = st.session_state.get(
+        "ticket_text", st.session_state.ticket_draft
+    )
     st.session_state.setdefault("review_queue", [])
     with st.sidebar:
         st.markdown("## ↗ SupportFlow")
@@ -358,12 +403,14 @@ def main():
         st.code("python -m supportflow.train", language="bash")
         return
     try:
-        model = load_model(MODEL_PATH.stat().st_mtime_ns)
+        stamp = (MODEL_PATH.stat().st_mtime_ns, MODEL_PATH.stat().st_size)
+        model = load_model(stamp)
     except Exception:
         st.error(
             "The model could not be loaded. Install requirements.txt and rerun python -m supportflow.train."
         )
         return
+    synchronize_model(stamp)
     with st.sidebar:
         st.divider()
         st.markdown("**Review policy**")
@@ -374,6 +421,7 @@ def main():
             model.threshold,
             0.025,
             help="Higher thresholds send more tickets for review. Scores are uncalibrated.",
+            key="review_threshold",
         )
         st.caption(
             "A lead of at least 10 percentage points over the second intent is also required."

@@ -57,3 +57,24 @@ def test_export_neutralizes_spreadsheet_formulas():
     assert "' +cmd" in exported
     assert "'@test" in exported
     assert "normal" in exported
+
+
+def test_blank_csv_records_remain_invalid_tickets():
+    frame = read_tickets(b"text\nWhere is my card\n\nI was charged twice\n")
+    assert frame.text.tolist() == ["Where is my card", "", "I was charged twice"]
+    result = classify_batch(frame, TicketClassifier.load(), threshold=1.0)
+    assert result.row.tolist() == [1, 2, 3]
+    assert result.status.iloc[1] == "Invalid ticket"
+
+
+def test_oversized_text_gets_row_error_instead_of_rejecting_entire_file():
+    frame = read_tickets(b"text\n" + b"word " * 30_000 + b"\nWhere is my card\n")
+    result = classify_batch(frame, TicketClassifier.load(), threshold=1.0)
+    assert len(result) == 2
+    assert result.status.iloc[0] == "Invalid ticket"
+    assert "4,000" in result.reason.iloc[0]
+    assert result.status.iloc[1] == "Needs review"
+
+
+def test_exact_batch_limit_is_accepted():
+    assert len(read_tickets(b"text\n" + b"Where is my card\n" * 250)) == 250

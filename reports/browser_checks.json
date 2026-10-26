@@ -4,7 +4,9 @@
     "Example select opens by keyboard and closes with Escape",
     "Review record saved and CSV export starts",
     "Invalid short input shows corrective error",
+    "Custom ticket draft and prediction persist across navigation",
     "CSV empty/error/success states, invalid row preservation and export",
+    "Batch upload and results persist across navigation and clear together",
     "Evaluation page, global scrollbar theme and reduced-motion mode",
     "390px viewport has no page-width overflow; lower action remains reachable"
   ],

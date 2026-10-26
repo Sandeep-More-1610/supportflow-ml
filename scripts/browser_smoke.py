@@ -57,6 +57,17 @@ def main():
         ).to_be_visible()
         checks.append("Invalid short input shows corrective error")
 
+        draft = "I was charged twice for the same purchase"
+        field.fill(draft)
+        page.get_by_role("button", name="Classify ticket", exact=True).click()
+        expect(page.get_by_text("Transaction charged twice", exact=True)).to_be_visible()
+        page.get_by_test_id("stSidebar").get_by_text("Review queue", exact=True).click()
+        expect(page.get_by_role("heading", name="Keep a person in the loop.")).to_be_visible()
+        page.get_by_test_id("stSidebar").get_by_text("Triage ticket", exact=True).click()
+        expect(page.get_by_role("textbox", name="Customer message")).to_have_value(draft)
+        expect(page.get_by_text("Transaction charged twice", exact=True)).to_be_visible()
+        checks.append("Custom ticket draft and prediction persist across navigation")
+
         page.get_by_test_id("stSidebar").get_by_text("Batch desk", exact=True).click()
         expect(
             page.get_by_text(
@@ -76,7 +87,7 @@ def main():
             {
                 "name": "tickets.csv",
                 "mimeType": "text/csv",
-                "buffer": b'text\nWhere is my card\n""\nI was charged twice at a shop\n',
+                "buffer": b"text\nWhere is my card\n\nI was charged twice at a shop\n",
             }
         )
         page.get_by_role("button", name="Classify batch", exact=True).click()
@@ -85,8 +96,23 @@ def main():
         with page.expect_download() as download_info:
             page.get_by_role("button", name="Download all results").click()
         assert download_info.value.suggested_filename == "supportflow_predictions.csv"
+        import csv
+
+        with open(download_info.value.path(), encoding="utf-8-sig", newline="") as downloaded:
+            exported_rows = list(csv.DictReader(downloaded))
+        assert len(exported_rows) == 3
+        assert exported_rows[1]["status"] == "Invalid ticket"
         page.screenshot(path=str(screenshots / "batch-desktop.png"), full_page=True)
         checks.append("CSV empty/error/success states, invalid row preservation and export")
+
+        page.get_by_test_id("stSidebar").get_by_text("Review queue", exact=True).click()
+        expect(page.get_by_role("heading", name="Keep a person in the loop.")).to_be_visible()
+        page.get_by_test_id("stSidebar").get_by_text("Batch desk", exact=True).click()
+        expect(page.get_by_role("button", name="Download all results")).to_be_visible()
+        page.get_by_role("button", name="Clear loaded batch").click()
+        expect(page.get_by_role("button", name="Download all results")).not_to_be_attached()
+        expect(page.get_by_role("button", name="Clear loaded batch")).not_to_be_attached()
+        checks.append("Batch upload and results persist across navigation and clear together")
 
         page.get_by_test_id("stSidebar").get_by_text("Model report", exact=True).click()
         expect(page.get_by_text("Test macro-F1", exact=True)).to_be_visible()
