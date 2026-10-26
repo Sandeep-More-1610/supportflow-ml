@@ -6,7 +6,8 @@ experiment before presenting yourself as able to explain the implementation.
 
 ## Resume entry
 
-**SupportFlow — ML Support Ticket Triage**  
+**SupportFlow — ML Support Ticket Triage**
+
 Python · scikit-learn · NLP · TF-IDF · Logistic Regression · Streamlit · pytest
 
 - Built an English banking-support classifier for 77 intents, achieving **90.01%
