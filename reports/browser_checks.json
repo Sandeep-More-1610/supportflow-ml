@@ -1,0 +1,18 @@
+{
+  "passed": [
+    "Single-ticket classification, real result and desktop screenshot",
+    "Example select opens by keyboard and closes with Escape",
+    "Review record saved and CSV export starts",
+    "Invalid short input shows corrective error",
+    "CSV empty/error/success states, invalid row preservation and export",
+    "Evaluation page, global scrollbar theme and reduced-motion mode",
+    "390px viewport has no page-width overflow; lower action remains reachable"
+  ],
+  "page_errors": [],
+  "browser": "Microsoft Edge (Chromium)",
+  "viewports": [
+    "1440x1200",
+    "390x1000"
+  ],
+  "reduced_motion": true
+}

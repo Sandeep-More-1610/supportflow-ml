@@ -1,0 +1,7 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {"name": "SupportFlow: run app", "type": "debugpy", "request": "launch", "module": "streamlit", "args": ["run", "app.py"], "cwd": "${workspaceFolder}", "justMyCode": true},
+    {"name": "SupportFlow: train model", "type": "debugpy", "request": "launch", "module": "supportflow.train", "cwd": "${workspaceFolder}", "justMyCode": true}
+  ]
+}

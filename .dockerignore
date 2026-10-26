@@ -1,0 +1,9 @@
+.venv
+.git
+data/raw
+__pycache__
+.pytest_cache
+.ruff_cache
+work
+reports/errors.csv
+reports/test_predictions.csv

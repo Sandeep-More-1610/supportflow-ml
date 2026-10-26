@@ -1,0 +1,8 @@
+# Runtime and training versions tested on Python 3.11.
+scikit-learn==1.7.2
+streamlit==1.66.1
+pandas==2.3.3
+numpy==2.4.6
+joblib==1.6.0
+matplotlib==3.11.2
+threadpoolctl==3.7.0

@@ -1,0 +1,309 @@
+{
+  "created_utc": "2026-10-26T17:16:27.858873+00:00",
+  "dataset": {
+    "dataset": "BANKING77",
+    "revision": "57ec275d8078af65b7731c2a98be812d844a6d6b",
+    "files": {
+      "train.csv": {
+        "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/banking_data/train.csv",
+        "sha256": "b06e26ac675513959a63135f11b94ea7786ed02da65db93a5650d8838cbc664b"
+      },
+      "test.csv": {
+        "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/banking_data/test.csv",
+        "sha256": "d12d6e3bc4c3103966ae786dc435913c0c563dfa328f5a3646d0e62cfeeb474d"
+      },
+      "categories.json": {
+        "url": "https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/57ec275d8078af65b7731c2a98be812d844a6d6b/banking_data/categories.json",
+        "sha256": "53261da888122daf2d120d925458631d9619e15d82e56052e7a42e535ce32b63"
+      }
+    }
+  },
+  "data_audit": {
+    "original_train_rows": 10003,
+    "conflicting_train_rows_removed": 2,
+    "duplicate_train_rows_removed": 30,
+    "train_test_overlap_rows_removed_from_train": 25,
+    "fit_rows": 7956,
+    "validation_rows": 1990,
+    "test_rows": 3080,
+    "test_duplicate_fingerprints": 4,
+    "intents": 77,
+    "seed": 42,
+    "test_policy": "Official test unchanged; normalized exact overlap removed from training only."
+  },
+  "models": [
+    {
+      "name": "Majority baseline",
+      "validation": {
+        "accuracy": 0.019095477386934675,
+        "macro_f1": 0.000486692794385102
+      },
+      "fit_seconds": 0.0,
+      "test": {
+        "accuracy": 0.012987012987012988,
+        "macro_f1": 0.000333000333000333
+      }
+    },
+    {
+      "name": "Word TF-IDF + logistic regression",
+      "validation": {
+        "accuracy": 0.8854271356783919,
+        "macro_f1": 0.8867118748560555
+      },
+      "fit_seconds": 6.581063999999969,
+      "test": {
+        "accuracy": 0.8766233766233766,
+        "macro_f1": 0.8765713857146893
+      }
+    },
+    {
+      "name": "Word + character TF-IDF (C=4)",
+      "validation": {
+        "accuracy": 0.8989949748743719,
+        "macro_f1": 0.8990337637425877
+      },
+      "fit_seconds": 12.784867200000008,
+      "test": {
+        "accuracy": 0.8967532467532467,
+        "macro_f1": 0.8970074292843572
+      }
+    },
+    {
+      "name": "Word + character TF-IDF (C=12)",
+      "validation": {
+        "accuracy": 0.9020100502512562,
+        "macro_f1": 0.9024899424917706
+      },
+      "fit_seconds": 17.665251800000078,
+      "test": {
+        "accuracy": 0.9,
+        "macro_f1": 0.9001408246720295
+      }
+    }
+  ],
+  "selected_model": "Word + character TF-IDF (C=12)",
+  "selection_metric": "validation macro-F1",
+  "test_metrics": {
+    "accuracy": 0.9,
+    "macro_f1": 0.9001408246720295
+  },
+  "top3_accuracy": 0.9717532467532467,
+  "routing": {
+    "threshold": 0.2,
+    "minimum_margin": 0.1,
+    "validation_accuracy_target": 0.9,
+    "validation_minimum_accepted": 100,
+    "test_coverage": 0.9353896103896104,
+    "test_accepted": 2881,
+    "test_accuracy_when_accepted": 0.9340506768483166,
+    "validation_curve": [
+      {
+        "threshold": 0.2,
+        "accepted": 1869,
+        "coverage": 0.9391959798994974,
+        "accuracy_when_accepted": 0.9299090422685928
+      },
+      {
+        "threshold": 0.225,
+        "accepted": 1865,
+        "coverage": 0.9371859296482412,
+        "accuracy_when_accepted": 0.9302949061662198
+      },
+      {
+        "threshold": 0.25,
+        "accepted": 1855,
+        "coverage": 0.9321608040201005,
+        "accuracy_when_accepted": 0.9309973045822102
+      },
+      {
+        "threshold": 0.275,
+        "accepted": 1846,
+        "coverage": 0.9276381909547738,
+        "accuracy_when_accepted": 0.9322860238353196
+      },
+      {
+        "threshold": 0.3,
+        "accepted": 1833,
+        "coverage": 0.921105527638191,
+        "accuracy_when_accepted": 0.9356246590289143
+      },
+      {
+        "threshold": 0.325,
+        "accepted": 1821,
+        "coverage": 0.9150753768844221,
+        "accuracy_when_accepted": 0.9384953322350357
+      },
+      {
+        "threshold": 0.35,
+        "accepted": 1807,
+        "coverage": 0.9080402010050251,
+        "accuracy_when_accepted": 0.9396790260099612
+      },
+      {
+        "threshold": 0.375,
+        "accepted": 1790,
+        "coverage": 0.8994974874371859,
+        "accuracy_when_accepted": 0.9424581005586592
+      },
+      {
+        "threshold": 0.4,
+        "accepted": 1772,
+        "coverage": 0.8904522613065327,
+        "accuracy_when_accepted": 0.9435665914221218
+      },
+      {
+        "threshold": 0.425,
+        "accepted": 1754,
+        "coverage": 0.8814070351758794,
+        "accuracy_when_accepted": 0.9464082098061574
+      },
+      {
+        "threshold": 0.45,
+        "accepted": 1725,
+        "coverage": 0.8668341708542714,
+        "accuracy_when_accepted": 0.9501449275362319
+      },
+      {
+        "threshold": 0.475,
+        "accepted": 1697,
+        "coverage": 0.8527638190954774,
+        "accuracy_when_accepted": 0.9552150854449027
+      },
+      {
+        "threshold": 0.5,
+        "accepted": 1668,
+        "coverage": 0.8381909547738694,
+        "accuracy_when_accepted": 0.9592326139088729
+      },
+      {
+        "threshold": 0.525,
+        "accepted": 1642,
+        "coverage": 0.8251256281407036,
+        "accuracy_when_accepted": 0.9646772228989038
+      },
+      {
+        "threshold": 0.55,
+        "accepted": 1617,
+        "coverage": 0.8125628140703518,
+        "accuracy_when_accepted": 0.9666048237476809
+      },
+      {
+        "threshold": 0.575,
+        "accepted": 1598,
+        "coverage": 0.8030150753768844,
+        "accuracy_when_accepted": 0.967459324155194
+      },
+      {
+        "threshold": 0.6,
+        "accepted": 1563,
+        "coverage": 0.785427135678392,
+        "accuracy_when_accepted": 0.9699296225207934
+      },
+      {
+        "threshold": 0.625,
+        "accepted": 1519,
+        "coverage": 0.7633165829145728,
+        "accuracy_when_accepted": 0.9723502304147466
+      },
+      {
+        "threshold": 0.65,
+        "accepted": 1477,
+        "coverage": 0.7422110552763819,
+        "accuracy_when_accepted": 0.975626269465132
+      },
+      {
+        "threshold": 0.675,
+        "accepted": 1441,
+        "coverage": 0.7241206030150754,
+        "accuracy_when_accepted": 0.9777931991672449
+      },
+      {
+        "threshold": 0.7,
+        "accepted": 1400,
+        "coverage": 0.7035175879396985,
+        "accuracy_when_accepted": 0.9807142857142858
+      },
+      {
+        "threshold": 0.725,
+        "accepted": 1366,
+        "coverage": 0.6864321608040201,
+        "accuracy_when_accepted": 0.9809663250366032
+      },
+      {
+        "threshold": 0.75,
+        "accepted": 1325,
+        "coverage": 0.6658291457286433,
+        "accuracy_when_accepted": 0.9833962264150944
+      },
+      {
+        "threshold": 0.775,
+        "accepted": 1281,
+        "coverage": 0.6437185929648241,
+        "accuracy_when_accepted": 0.9836065573770492
+      },
+      {
+        "threshold": 0.8,
+        "accepted": 1237,
+        "coverage": 0.621608040201005,
+        "accuracy_when_accepted": 0.9862570735650767
+      },
+      {
+        "threshold": 0.825,
+        "accepted": 1174,
+        "coverage": 0.5899497487437186,
+        "accuracy_when_accepted": 0.9880749574105622
+      },
+      {
+        "threshold": 0.85,
+        "accepted": 1100,
+        "coverage": 0.5527638190954773,
+        "accuracy_when_accepted": 0.9918181818181818
+      },
+      {
+        "threshold": 0.875,
+        "accepted": 1032,
+        "coverage": 0.5185929648241207,
+        "accuracy_when_accepted": 0.9922480620155039
+      },
+      {
+        "threshold": 0.9,
+        "accepted": 928,
+        "coverage": 0.4663316582914573,
+        "accuracy_when_accepted": 0.9946120689655172
+      },
+      {
+        "threshold": 0.925,
+        "accepted": 788,
+        "coverage": 0.39597989949748746,
+        "accuracy_when_accepted": 0.9949238578680203
+      },
+      {
+        "threshold": 0.95,
+        "accepted": 617,
+        "coverage": 0.3100502512562814,
+        "accuracy_when_accepted": 0.9967585089141004
+      }
+    ]
+  },
+  "latency_ms": {
+    "median": 7.30705000000853,
+    "p95": 9.00027500026681,
+    "samples": 100,
+    "scope": "Warm pipeline, single ticket, this machine"
+  },
+  "environment": {
+    "python": "3.11.7",
+    "scikit_learn": "1.7.2",
+    "numpy": "2.4.6",
+    "platform": "Windows-10-10.0.26300-SP0"
+  },
+  "training_seconds": 39.502992899999754,
+  "limitations": [
+    "English banking queries only; not a general support classifier.",
+    "Scores are uncalibrated model probabilities, not correctness guarantees.",
+    "Threshold uses in-domain validation only; no validated out-of-domain detector.",
+    "Team routing is a hand-written demo mapping, not a learned or evaluated business policy.",
+    "Exact normalized duplicates checked; semantic paraphrase overlap may remain.",
+    "No transformer trained or benchmarked in this version."
+  ]
+}

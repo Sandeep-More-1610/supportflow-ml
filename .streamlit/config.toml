@@ -1,0 +1,15 @@
+# Colors mirror assets/tokens.json; checked by tests/test_project.py.
+[theme]
+base = "light"
+primaryColor = "#3159C9"
+backgroundColor = "#F5F7FB"
+secondaryBackgroundColor = "#EAF0FA"
+textColor = "#192B46"
+font = "sans serif"
+
+[server]
+maxUploadSize = 1
+headless = true
+
+[browser]
+gatherUsageStats = false
